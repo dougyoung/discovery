@@ -1,8 +1,8 @@
 package course1.week2
 
 class Rational(x: Int, y: Int) {
-  def numer: Int = x
-  def denom: Int = y
+  def numer: Int = x / g
+  def denom: Int = y / g
 
   def add(r: Rational) = new Rational(
     numer * r.denom + denom * r.numer,
@@ -21,5 +21,10 @@ class Rational(x: Int, y: Int) {
   override def hashCode: Int =
     (numer.toDouble / denom).hashCode
 
-  override def toString: String = numer + "/" + denom
+  override def toString: String =
+    if (denom == 1) numer + "" else numer + "/" + denom
+
+  private val g = gcd(x, y)
+  private def gcd(a: Int, b: Int): Int =
+    if (b == 0) a else gcd(b, a % b)
 }
