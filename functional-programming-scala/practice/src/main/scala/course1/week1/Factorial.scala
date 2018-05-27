@@ -3,9 +3,8 @@ package course1.week1
 import scala.annotation.tailrec
 
 object Factorial {
-  def factorial(n: Int): Int = {
+  def factorial(n: Int): Int =
     if (n == 0) 1 else n * factorial(n - 1)
-  }
 
   def factorialTailRecursive(n: Int): Int = {
     @tailrec
