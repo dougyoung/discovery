@@ -44,6 +44,5 @@ class PolymorphismSpec extends FunSpec {
         assert(nth(0, l3) == 2)
       }
     }
-
   }
 }
