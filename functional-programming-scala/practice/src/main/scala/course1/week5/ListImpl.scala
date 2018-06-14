@@ -13,6 +13,24 @@ object ListImpl {
     case y :: ys => y :: init(ys)
   }
 
+  def mergesort(xs: List[Int]): List[Int] = {
+    val n = xs.length / 2
+    if (n == 0) xs
+    else {
+      def merge(xs: List[Int], ys: List[Int]): List[Int] =
+        (xs, ys) match {
+          case (_, Nil) => xs
+          case (Nil, _) => ys
+          case (x :: xs1, y :: ys1) =>
+            if (x < y) x :: merge(xs1, ys)
+            else y :: merge(xs, ys1)
+        }
+
+      val (fst, snd) = xs splitAt n
+      merge(mergesort(fst), mergesort(snd))
+    }
+  }
+
   def removeAt[T](xs: List[T], n: Int): List[T] = {
     def finder(xs: List[T], i: Int): List[T] = xs match {
       case Nil => xs

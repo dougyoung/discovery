@@ -1,5 +1,6 @@
 package course1.week5
 
+import scala.util.Random.shuffle
 import org.junit.runner.RunWith
 import org.scalatest.FunSpec
 import org.scalatest.junit.JUnitRunner
@@ -55,7 +56,7 @@ class ListImplSpec extends FunSpec {
   }
 
   describe("init") {
-    it("returns all elements except the last") {
+    it("returns a list of all elements except the last") {
       new TestLists {
         assertThrows[IllegalArgumentException](init(l0))
         assert(init(l1) == l1.init)
@@ -65,8 +66,19 @@ class ListImplSpec extends FunSpec {
     }
   }
 
+  describe("mergesort") {
+    it("returns a list of all elements sorted ascending") {
+      new TestLists {
+        assert(mergesort(shuffle(l0)) == l0)
+        assert(mergesort(shuffle(l1)) == l1)
+        assert(mergesort(shuffle(l2)) == l2)
+        assert(mergesort(shuffle(l3)) == l3)
+      }
+    }
+  }
+
   describe("removeAt") {
-    it("returns all elements with index removed") {
+    it("returns a list of all elements with index element removed") {
       new TestLists {
         assert(removeAt(l0, -1) == l0)
         assert(removeAt(l0, 0) == l0)
@@ -91,7 +103,7 @@ class ListImplSpec extends FunSpec {
   }
 
   describe("reverse") {
-    it("returns all elements reversed") {
+    it("returns a list of all elements reversed") {
       new TestLists {
         assert(reverse(l0) == l0.reverse)
         assert(reverse(l1) == l1.reverse)
