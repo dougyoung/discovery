@@ -10,10 +10,15 @@ class ListImplSpec extends FunSpec {
   import ListImpl._
 
   trait TestLists {
-    val l0 = List()
+    val l0 = List[Int]()
     val l1 = List(1)
     val l2 = List(1, 2)
     val l3 = List(1, 2, 3)
+
+    val lBooleans3 = List(false, true, true)
+    val lChars3 = List('a', 'b', 'c')
+    val lDoubles3 = List(1.0, 2.0, 3.0)
+    val lStrings3 = List("a", "b", "c")
   }
 
   describe("flatten") {
@@ -73,6 +78,15 @@ class ListImplSpec extends FunSpec {
         assert(mergesort(shuffle(l1)) == l1)
         assert(mergesort(shuffle(l2)) == l2)
         assert(mergesort(shuffle(l3)) == l3)
+      }
+    }
+
+    it("returns a list of all elements sorted which have a defined Ordering") {
+      new TestLists {
+        assert(mergesort(shuffle(lBooleans3)) == lBooleans3)
+        assert(mergesort(shuffle(lChars3)) == lChars3)
+        assert(mergesort(shuffle(lDoubles3)) == lDoubles3)
+        assert(mergesort(shuffle(lStrings3)) == lStrings3)
       }
     }
   }
