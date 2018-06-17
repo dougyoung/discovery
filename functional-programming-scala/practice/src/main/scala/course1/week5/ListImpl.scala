@@ -18,6 +18,12 @@ object ListImpl {
     case y :: ys => y :: init(ys)
   }
 
+  def length[T](xs: List[T]): Int =
+    (xs foldRight 0)( (_, acc) => acc + 1 )
+
+  def map[T, U](xs: List[T], f: T => U): List[U] =
+    (xs foldRight List[U]())( (x, acc) => f(x) :: acc )
+
   def mergesort[T](xs: List[T])(implicit ord: Ordering[T]): List[T] = {
     val n = xs.length / 2
     if (n == 0) xs

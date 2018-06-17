@@ -85,6 +85,38 @@ class ListImplSpec extends FunSpec {
     }
   }
 
+  describe("length") {
+    it("returns the length of a list as an Int") {
+      new TestLists {
+        assert(length(l0) == l0.length)
+        assert(length(l1) == l1.length)
+        assert(length(l2) == l2.length)
+        assert(length(l3) == l3.length)
+
+        assert(length(lBooleans3) == lBooleans3.length)
+        assert(length(lChars3) == lChars3.length)
+        assert(length(lDoubles3) == lDoubles3.length)
+        assert(length(lStrings3) == lStrings3.length)
+        assert(length(lStringsContiguous) == lStringsContiguous.length)
+      }
+    }
+  }
+
+  describe("map") {
+    it("returns a list of all elements mapped by the given function") {
+      new TestLists {
+        assert(map[Int, Int](l0, x => x) == l0)
+        assert(map[Int, Int](l1, x => x) == l1)
+        assert(map[Int, Int](l2, x => x) == l2)
+        assert(map[Int, Int](l3, x => x) == l3)
+        assert(map[Int, Int](l0, x => x * x) == l0.map(x => x * x))
+        assert(map[Int, Int](l1, x => x * x) == l1.map(x => x * x))
+        assert(map[Int, Int](l2, x => x * x) == l2.map(x => x * x))
+        assert(map[Int, Int](l3, x => x * x) == l3.map(x => x * x))
+      }
+    }
+  }
+
   describe("mergesort") {
     it("returns a list of all elements sorted ascending") {
       new TestLists {
