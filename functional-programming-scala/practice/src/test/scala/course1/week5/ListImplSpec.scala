@@ -19,6 +19,20 @@ class ListImplSpec extends FunSpec {
     val lChars3 = List('a', 'b', 'c')
     val lDoubles3 = List(1.0, 2.0, 3.0)
     val lStrings3 = List("a", "b", "c")
+    val lStringsContiguous = List("a", "a", "a", "b", "c", "c", "a")
+  }
+
+  describe("encode") {
+    it("returns a list of tuples of (T, Int) representing the run length encoding") {
+      new TestLists {
+        assert(encode(l0) == List())
+        assert(encode(l1) == List((1, 1)))
+        assert(encode(l2) == List((1, 1), (2, 1)))
+        assert(encode(l3) == List((1, 1), (2, 1), (3, 1)))
+        assert(encode(lStrings3) == List(("a", 1), ("b", 1), ("c", 1)))
+        assert(encode(lStringsContiguous) == List(("a", 3), ("b", 1), ("c", 2), ("a", 1)))
+      }
+    }
   }
 
   describe("flatten") {
@@ -91,6 +105,19 @@ class ListImplSpec extends FunSpec {
     }
   }
 
+  describe("pack") {
+    it("returns a list of lists of contiguous values") {
+      new TestLists {
+        assert(pack(l0) == List())
+        assert(pack(l1) == List(List(1)))
+        assert(pack(l2) == List(List(1), List(2)))
+        assert(pack(l3) == List(List(1), List(2), List(3)))
+        assert(pack(lStrings3) == List(List("a"), List("b"), List("c")))
+        assert(pack(lStringsContiguous) == List(List("a", "a", "a"), List("b"), List("c", "c"), List("a")))
+      }
+    }
+  }
+
   describe("removeAt") {
     it("returns a list of all elements with index element removed") {
       new TestLists {
@@ -123,6 +150,28 @@ class ListImplSpec extends FunSpec {
         assert(reverse(l1) == l1.reverse)
         assert(reverse(l2) == l2.reverse)
         assert(reverse(l3) == l3.reverse)
+      }
+    }
+  }
+
+  describe("squareList") {
+    it("returns a list of all elements squared") {
+      new TestLists {
+        assert(squareList(l0) == List())
+        assert(squareList(l1) == List(1))
+        assert(squareList(l2) == List(1, 4))
+        assert(squareList(l3) == List(1, 4, 9))
+      }
+    }
+  }
+
+  describe("squareListMapImpl") {
+    it("returns a list of all elements squared") {
+      new TestLists {
+        assert(squareListMapImpl(l0) == List())
+        assert(squareListMapImpl(l1) == List(1))
+        assert(squareListMapImpl(l2) == List(1, 4))
+        assert(squareListMapImpl(l3) == List(1, 4, 9))
       }
     }
   }

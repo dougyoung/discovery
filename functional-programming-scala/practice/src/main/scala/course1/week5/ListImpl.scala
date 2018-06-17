@@ -3,6 +3,9 @@ package course1.week5
 import scala.math.Ordering
 
 object ListImpl {
+  def encode[T](xs: List[T]): List[(T, Int)] =
+    pack(xs) map (x => (x.head, x.size))
+
   def flatten(xs: List[Any]): List[Any] = xs match {
     case Nil => Nil
     case (y: List[_]) :: ys => flatten(y) ++ flatten(ys)
@@ -33,6 +36,13 @@ object ListImpl {
     }
   }
 
+  def pack[T](xs: List[T]): List[List[T]] = xs match {
+    case Nil => Nil
+    case x :: _ =>
+      val (first, rest) = xs span (x1 => x == x1)
+      first :: pack(rest)
+  }
+
   def removeAt[T](xs: List[T], n: Int): List[T] = {
     def finder(xs: List[T], i: Int): List[T] = xs match {
       case Nil => xs
@@ -47,4 +57,13 @@ object ListImpl {
     case Nil => xs
     case y :: ys => reverse(ys) ++ List(y)
   }
+
+  def squareList(xs: List[Int]): List[Int] =
+    xs match {
+      case Nil => xs
+      case y :: ys => y * y :: squareList(ys)
+    }
+
+  def squareListMapImpl(xs: List[Int]): List[Int] =
+    xs.map(x => x * x)
 }
