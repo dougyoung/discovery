@@ -15,7 +15,11 @@ public class Main {
             PrefixNode current = root;
 
             for (Character c : word.toCharArray()) {
-                current = current.children.computeIfAbsent(c, PrefixNode::new);
+                if (current.getChild(c) == null) {
+                    current.setChild(c);
+                }
+
+                current = current.getChild(c);
                 current.words.add(word);
             }
         }
@@ -24,8 +28,8 @@ public class Main {
             PrefixNode current = root;
 
             for (Character c : prefix.toCharArray()) {
-                if (current.children.containsKey(c)) {
-                    current = current.children.get(c);
+                if (current.getChild(c) != null) {
+                    current = current.getChild(c);
                 } else {
                     return 0;
                 }
@@ -36,7 +40,7 @@ public class Main {
     }
 
     static class PrefixNode {
-        private Map<Character, PrefixNode> children = new HashMap<>();
+        private PrefixNode[] children = new PrefixNode[26];
         private List<String> words = new LinkedList<>();
         private char character;
 
@@ -44,6 +48,14 @@ public class Main {
 
         PrefixNode(char c) {
             character = c;
+        }
+
+        public PrefixNode getChild(char c) {
+            return this.children[c - 97];
+        }
+
+        public void setChild(char c) {
+            this.children[c - 97] = new PrefixNode(c);
         }
     }
 
