@@ -1,76 +1,93 @@
 import java.util.*;
 
 public class Main {
+    public static class UndirectedGraph {
+        private int idOffset;
+        private Node[] nodes;
 
-    private static Map<Integer, Node> nodeLookup = new HashMap<>();
-
-    public static class Node {
-        private int id;
-
-        LinkedList<Node> adjacent = new LinkedList<>();
-
-        private Node(int id) {
-            this.id = id;
+        UndirectedGraph(int size) {
+            this.idOffset = -1;
+            this.nodes = new Node[size];
         }
-    }
 
-    private Node getNode(int id) {
-        return nodeLookup.getOrDefault(id, new Node(id));
-    }
+        class Node {
+            private int id;
+            private Set<Node> adjacent = new HashSet<>();
 
-    public void addEdge(int source, int destination) {
-        Node s = getNode(source);
-        Node d = getNode(destination);
-        s.adjacent.add(d);
-    }
-
-    public boolean hasPathDFS(int source, int destination) {
-        Node s = getNode(source);
-        Node d = getNode(destination);
-        Set<Integer> visited = new HashSet<>();
-        return hasPathDFS(s, d, visited);
-    }
-
-    public boolean hasPathDFS(Node s, Node d, Set<Integer> visited) {
-        if (visited.contains(s.id)) return false;
-
-        visited.add(s.id);
-
-        if (s == d) return true;
-
-        for (Node node : s.adjacent) {
-            if (hasPathDFS(node, d, visited)) {
-                return true;
+            Node(int id) {
+                this.id = id;
             }
         }
 
-        return false;
-    }
+        public void addEdge(int oneId, int twoId) {
+            Node oneNode = nodes[oneId];
+            Node twoNode = nodes[twoId];
 
-    public boolean hasPathBFS(Node s, Node d) {
+            if (oneNode == null) {
+                oneNode = new Node(oneId);
+                nodes[oneNode.id] = oneNode;
+            }
 
+            if (twoNode == null) {
+                twoNode = new Node(twoId);
+                nodes[twoNode.id] = twoNode;
+            }
+
+            oneNode.adjacent.add(twoNode);
+            twoNode.adjacent.add(oneNode);
+        }
+
+        public int[] findShortestPaths(int startId) {
+            Node start = nodes[startId];
+
+            int[] distances = new int[nodes.length];
+            Arrays.fill(distances, -1);
+            distances[start.id] = 0;
+
+            LinkedList<Node> queue = new LinkedList<>();
+            queue.add(start);
+
+            while (!queue.isEmpty()) {
+                Node current = queue.pollFirst();
+                for (Node nextNode : current.adjacent) {
+                    if (distances[nextNode.id] < 0) {
+                        queue.add(nextNode);
+                        distances[nextNode.id] =
+                            distances[current.id] + 6;
+                    }
+                }
+            }
+
+            return distances;
+        }
     }
 
     public static void main(String[] args) {
-        Scanner in = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-        int queriesNum = in.nextInt();
+        int queriesNum = scanner.nextInt();
         for (int i = 0; i < queriesNum; i++) {
-            int nodesNum = in.nextInt();
-            int vertexNum = in.nextInt();
+            int nodesNum = scanner.nextInt();
+            int edgesNum = scanner.nextInt();
 
-            for (int j = 0; j < vertexNum; j++) {
-                int nodeStart = in.nextInt();
-                int nodeEnd = in.nextInt();
+            UndirectedGraph graph = new UndirectedGraph(nodesNum);
+            for (int j = 0; j < edgesNum; j++) {
+                int nodeOne = scanner.nextInt();
+                int nodeTwo = scanner.nextInt();
 
-                Set<Integer> startEnd = graph.getOrDefault(nodeStart, new HashSet<>());
-                startEnd.add(nodeEnd);
-                graph.put(nodeStart, startEnd);
-
-                Set<Integer> endStart = graph.getOrDefault(nodeEnd, new HashSet<>());
-                endStart.add(nodeStart);
-                graph.put(nodeEnd, endStart);
+                graph.addEdge(nodeOne - 1, nodeTwo - 1);
             }
+
+            int nodeStart = scanner.nextInt();
+            int[] distances = graph.findShortestPaths(nodeStart - 1);
+
+            for (int distance : distances) {
+                if (distance != 0) {
+                    System.out.print(distance + " ");
+                }
+            }
+
+            System.out.println();
         }
     }
 }
